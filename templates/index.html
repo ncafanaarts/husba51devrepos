@@ -3,63 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Rede Social de Imagens</title>
+    <title>Husba51: If its men, its dick</title>
     <style>
-        :root { --primary: #3b82f6; --dark: #1e293b; --bg: #f1f5f9; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: var(--dark); }
+        /* TEMA LILÁS E RESPONSIVIDADE */
+        :root { 
+            --primary: #a78bfa; /* Lilás principal */
+            --primary-dark: #7c3aed; Minha Rede Social de Imagens
+            --bg: #f5f3ff; /* Fundo lilás bem clarinho */
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            padding: 10px; 
+            color: #4c1d95; 
+        }
 
-        /* Logotipo e Header */
-        .header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; background: grey; padding: 15px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .logo { width: 60px; height: 60px; object-fit: contain; }
+        /* HEADER COM LOGO MAIOR */
+        .header { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 10px rgba(167, 139, 250, 0.2);
+        }
+        
+        .logo { 
+            width: 120px; /* Logo maior como pedido */
+            height: auto; 
+            object-fit: contain; 
+        }
 
-        /* Busca */
-        .search-bar { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #ddd; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; }
+        .search-bar { 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 10px; 
+            border: 2px solid var(--primary); 
+            margin-bottom: 20px; 
+            box-sizing: border-box;
+        }
 
-        /* Formulário de Postagem */
-        .upload-box { background: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        .upload-box input[type="text"] { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
-        #preview { max-width: 200px; display: none; margin: 15px 0; border-radius: 8px; border: 2px solid var(--primary); }
+        /* SUPORTE PARA CELULAR (GRID DINÂMICO) */
+        .gallery { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); 
+            gap: 15px; 
+        }
 
-        /* Galeria */
-        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .card img { width: 100%; height: 250px; object-fit: cover; cursor: pointer; transition: transform 0.3s; }
-        .card img:hover { transform: scale(1.02); }
-        .card-info { padding: 15px; }
+        /* No computador, as fotos ficam em colunas menores */
+        @media (min-width: 600px) {
+            .gallery { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+            body { padding: 20px; }
+        }
 
-        /* Comentários */
-        .comment-box { margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; }
-        .comment-list { max-height: 100px; overflow-y: auto; margin-bottom: 10px; font-size: 14px; }
-        .comment-text { background: #f8fafc; padding: 5px 10px; border-radius: 5px; margin-bottom: 5px; }
-        .comment-input-group { display: flex; gap: 5px; }
-        .comment-input-group input { flex: 1; padding: 5px; border-radius: 4px; border: 1px solid #ddd; }
+        .card { 
+            background: white; 
+            border-radius: 15px; 
+            overflow: hidden; 
+            border: 1px solid #ddd6fe;
+        }
 
-        /* Modal (Zoom da Imagem) */
-        .modal { display: none; position: fixed; z-index: 999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
-        .modal img { max-width: 90%; max-height: 90%; border-radius: 5px; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
-        .close-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
+        .card img { 
+            width: 100%; 
+            aspect-ratio: 1/1; 
+            object-fit: cover; 
+            cursor: pointer; 
+        }
+
+        .btn-post {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* MODAL DE ZOOM */
+        .modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.9); 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .modal img { max-width: 95%; max-height: 90%; border-radius: 5px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <img src="/static/logo.png" alt="Logo" class="logo" onerror="this.src='https://via.placeholder.com/60?text=Sua+Logo'">
-        <h1>ImageSocial</h1>
+        <img src="/static/logo.png" alt="Logo" class="logo" onerror="this.src='https://via.placeholder.com/120?text=LOGO'">
+        <h1 style="margin:0;">Husba51E</h1>
     </div>
 
     <form action="/" method="GET">
-        <input type="text" name="search" class="search-bar" placeholder="Pesquisar por título...">
+        <input type="text" name="search" class="search-bar" placeholder="Pesquisar...">
     </form>
 
-    <div class="upload-box">
-        <h3>Nova Publicação</h3>
+    <div style="background: white; padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 1px solid #ddd6fe;">
+        <h3 style="margin-top:0;">Enviar Foto</h3>
         <form action="/upload" method="POST" enctype="multipart/form-data">
-            <input type="text" name="title" placeholder="Dê um título à sua foto..." required>
-            <input type="file" name="file" id="fileInput" accept="image/*" required>
-            <br>
-            <img id="preview" src="">
-            <br>
-            <button type="submit" style="background: var(--primary); color: white; padding: 10px 25px; border: none; border-radius: 6px; cursor: pointer;">Postar agora</button>
+            <input type="text" name="title" placeholder="Título" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
+            <input type="file" name="file" accept="image/*" required style="margin-bottom: 15px;">
+            <button type="submit" class="btn-post">Publicar Momento</button>
         </form>
     </div>
 
@@ -67,18 +124,15 @@
         {% for post in posts %}
         <div class="card">
             <img src="{{ post.url }}" onclick="openModal(this.src)">
-            <div class="card-info">
-                <strong>{{ post.title }}</strong>
-
-                <div class="comment-box">
-                    <div class="comment-list">
-                        {% for c in post.comments %}
-                        <div class="comment-text">{{ c }}</div>
-                        {% endfor %}
-                    </div>
-                    <form action="/comment/{{ post.id }}" method="POST" class="comment-input-group">
-                        <input type="text" name="comment" placeholder="Comentar..." required>
-                        <button type="submit">➤</button>
+            <div style="padding:15px;">
+                <strong style="font-size: 1.1em;">{{ post.title }}</strong>
+                <div style="margin-top:12px;">
+                    {% for c in post.comments %}
+                        <div style="background:#f5f3ff; padding:8px; margin-top:5px; border-radius:8px; border-left: 3px solid var(--primary);">{{ c }}</div>
+                    {% endfor %}
+                    <form action="/comment/{{ post.id }}" method="POST" style="margin-top:15px; display: flex; gap: 5px;">
+                        <input type="text" name="comment" placeholder="Comentar..." required style="flex:1; padding: 8px; border-radius: 5px; border: 1px solid #ddd;">
+                        <button type="submit" style="background: var(--primary); color: white; border: none; border-radius: 5px; padding: 0 15px;">➤</button>
                     </form>
                 </div>
             </div>
@@ -86,42 +140,14 @@
         {% endfor %}
     </div>
 
-    <div id="imageModal" class="modal">
-        <span class="close-modal" onclick="closeModal()">&times;</span>
-        <img id="modalImg" src="">
+    <div id="imageModal" class="modal" onclick="this.style.display='none'">
+        <img id="imgExpanded">
     </div>
 
     <script>
-        // Script para o Preview antes do upload
-        const fileInput = document.getElementById('fileInput');
-        const previewImg = document.getElementById('preview');
-
-        fileInput.onchange = e => {
-            const [file] = fileInput.files;
-            if (file) {
-                previewImg.src = URL.createObjectURL(file);
-                previewImg.style.display = 'block';
-            }
-        }
-
-        // Scripts para o Modal (Zoom)
-        const modal = document.getElementById('imageModal');
-        const modalImg = document.getElementById('modalImg');
-
         function openModal(src) {
-            modal.style.display = "flex";
-            modalImg.src = src;
-        }
-
-        function closeModal() {
-            modal.style.display = "none";
-        }
-
-        // Fechar modal ao clicar fora da imagem
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                closeModal();
-            }
+            document.getElementById('imgExpanded').src = src;
+            document.getElementById('imageModal').style.display = 'flex';
         }
     </script>
 </body>
