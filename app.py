@@ -1,20 +1,24 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for
-from werkzeug.utils import secure_filename
+import cloudinary
+import cloudinary.uploader
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = 'static/uploads'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+# CONFIGURAÇÃO DO CLOUDINARY (Pegue no painel do Cloudinary)
+cloudinary.config( 
+  cloud_name = "COLOQUE_AQUI", 
+  api_key = "COLOQUE_AQUI", 
+  api_secret = "COLOQUE_AQUI",
+  secure = True
+)
 
-# Lista que simula o banco de dados
+# Lista de posts (Em um site profissional usaríamos um Banco de Dados)
 db_posts = []
 
 @app.route('/')
 def index():
     search_query = request.args.get('search', '').lower()
-    # MOSTRA APENAS APROVADOS
     posts = [p for p in db_posts if p['status'] == 'aprovado']
     if search_query:
         posts = [p for p in posts if search_query in p['title'].lower()]
@@ -25,21 +29,21 @@ def upload():
     title = request.form.get('title')
     file = request.files['file']
     if file and title:
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        # Envia para o Cloudinary em vez de salvar na pasta local
+        upload_result = cloudinary.uploader.upload(file)
+        img_url = upload_result['secure_url']
         
         db_posts.append({
             'id': len(db_posts),
             'title': title,
-            'url': f'/static/uploads/{filename}',
+            'url': img_url,
             'comments': [],
-            'status': 'pendente' # Fica invisível até você aprovar
+            'status': 'pendente'
         })
-    return "<h2>Enviado! Aguarde o administrador aprovar sua foto.</h2><a href='/'>Voltar</a>"
+    return "<h2>Enviado! Aguarde a aprovação.</h2><a href='/'>Voltar</a>"
 
 @app.route('/admin')
 def admin():
-    # Painel para você ver o que está pendente
     pendentes = [p for p in db_posts if p['status'] == 'pendente']
     return render_template('admin.html', posts=pendentes)
 
@@ -48,12 +52,6 @@ def aprovar(post_id):
     for post in db_posts:
         if post['id'] == post_id:
             post['status'] = 'aprovado'
-    return redirect(url_for('admin'))
-
-@app.route('/recusar/<int:post_id>')
-def recusar(post_id):
-    global db_posts
-    db_posts = [p for p in db_posts if p['id'] != post_id]
     return redirect(url_for('admin'))
 
 @app.route('/comment/<int:post_id>', methods=['POST'])
@@ -65,4 +63,4 @@ def add_comment(post_id):
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
