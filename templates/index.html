@@ -3,150 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Husba51: If its men, its dick</title>
+    <title>Husba51n</title>
     <style>
-        /* TEMA LILÁS E RESPONSIVIDADE */
-        :root { 
-            --primary: #a78bfa; /* Lilás principal */
-            --primary-dark: #7c3aed; Minha Rede Social de Imagens
-            --bg: #f5f3ff; /* Fundo lilás bem clarinho */
-        }
+        :root { --primary: #a78bfa; --bg: #f5f3ff; }
+        body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 10px; color: #4c1d95; }
+        .header { display: flex; flex-direction: column; align-items: center; background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
+        .logo { width: 120px; margin-bottom: 10px; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
+        .card { background: white; border-radius: 15px; overflow: hidden; text-align: center; padding-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; }
         
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: var(--bg); 
-            margin: 0; 
-            padding: 10px; 
-            color: #4c1d95; 
-        }
-
-        /* HEADER COM LOGO MAIOR */
-        .header { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            gap: 10px; 
-            margin-bottom: 20px; 
-            background: white; 
-            padding: 20px; 
-            border-radius: 15px; 
-            box-shadow: 0 4px 10px rgba(167, 139, 250, 0.2);
-        }
-        
-        .logo { 
-            width: 120px; /* Logo maior como pedido */
-            height: auto; 
-            object-fit: contain; 
-        }
-
-        .search-bar { 
-            width: 100%; 
-            padding: 12px; 
-            border-radius: 10px; 
-            border: 2px solid var(--primary); 
-            margin-bottom: 20px; 
-            box-sizing: border-box;
-        }
-
-        .gallery { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); 
-            gap: 15px; 
-        }
-
-        /* No computador, as fotos ficam em colunas menores */
-        @media (min-width: 600px) {
-            .gallery { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
-            body { padding: 20px; }
-        }
-
-        .card { 
-            background: white; 
-            border-radius: 15px; 
-            overflow: hidden; 
-            border: 1px solid #ddd6fe;
-        }
-
-        .card img { 
-            width: 100%; 
-            aspect-ratio: 1/1; 
-            object-fit: cover; 
-            cursor: pointer; 
-        }
-
-        .btn-post {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            width: 100%;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* MODAL DE ZOOM */
-        .modal { 
-            display: none; 
-            position: fixed; 
-            z-index: 1000; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); 
-            align-items: center; 
-            justify-content: center; 
-        }
-        .modal img { max-width: 95%; max-height: 90%; border-radius: 5px; }
+        /* MODAL COM COMENTÁRIOS */
+        .modal { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); flex-direction: column; align-items: center; overflow-y: auto; padding: 20px; }
+        .modal-content { background: white; width: 100%; max-width: 500px; border-radius: 15px; overflow: hidden; margin-top: 20px; }
+        .modal-content img { width: 100%; }
+        .comment-section { padding: 20px; text-align: left; }
+        .close-btn { color: white; font-size: 30px; align-self: flex-end; cursor: pointer; }
     </style>
-</head>Husba51n
+</head>
 <body>
 
     <div class="header">
-        <img src="/static/logo.png" alt="Logo" class="logo" onerror="this.src='https://via.placeholder.com/120?text=LOGO'">
-        <h1 style="margin:0;">Husba51n</h1>
+        <img src="/static/logo.png" class="logo" onerror="this.src='https://via.placeholder.com/120'">
+        <h1>Husba51n</h1>
     </div>
 
-    <form action="/" method="GET">
-        <input type="text" name="search" class="search-bar" placeholder="Pesquisar...">
-    </form>
-
-    <div style="background: white; padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 1px solid #ddd6fe;">
-        <h3 style="margin-top:0;">Enviar Foto</h3>
+    <div style="background: white; padding: 20px; border-radius: 15px; margin-bottom: 25px;">
         <form action="/upload" method="POST" enctype="multipart/form-data">
-            <input type="text" name="title" placeholder="Título" required style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
-            <input type="file" name="file" accept="image/*" required style="margin-bottom: 15px;">
-            <button type="submit" class="btn-post">Publicar</button>
+            <input type="text" name="title" placeholder="Título" required style="width:90%; padding:10px; margin-bottom:10px;">
+            <input type="file" name="file" accept="image/*" required>
+            <button type="submit" style="background:var(--primary); color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; width:100%; margin-top:10px;">Publicar</button>
         </form>
     </div>
 
     <div class="gallery">
         {% for post in posts %}
         <div class="card">
-            <img src="{{ post.url }}" onclick="openModal(this.src)">
-            <div style="padding:15px;">
-                <strong style="font-size: 1.1em;">{{ post.title }}</strong>
-                <div style="margin-top:12px;">
-                    {% for c in post.comments %}
-                        <div style="background:#f5f3ff; padding:8px; margin-top:5px; border-radius:8px; border-left: 3px solid var(--primary);">{{ c }}</div>
-                    {% endfor %}
-                    <form action="/comment/{{ post.id }}" method="POST" style="margin-top:15px; display: flex; gap: 5px;">
-                        <input type="text" name="comment" placeholder="Comentar..." required style="flex:1; padding: 8px; border-radius: 5px; border: 1px solid #ddd;">
-                        <button type="submit" style="background: var(--primary); color: white; border: none; border-radius: 5px; padding: 0 15px;">➤</button>
-                    </form>
-                </div>
-            </div>
+            <img src="{{ post.url }}" onclick="openModal('{{ post.url }}', '{{ post.title }}', {{ post.comments | tojson }}, '{{ post.id }}')">
+            <p><strong>{{ post.title }}</strong></p>
         </div>
         {% endfor %}
     </div>
 
-    <div id="imageModal" class="modal" onclick="this.style.display='none'">
-        <img id="imgExpanded">
+    <div id="imageModal" class="modal">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <img id="imgExpanded">
+            <div class="comment-section">
+                <h3 id="modalTitle"></h3>
+                <hr>
+                <div id="modalComments"></div>
+                <form id="commentForm" method="POST" style="margin-top:15px; display:flex; gap:5px;">
+                    <input type="text" name="comment" placeholder="Escreva um comentário..." required style="flex:1; padding:8px;">
+                    <button type="submit" style="background:var(--primary); color:white; border:none; padding:8px 15px; border-radius:5px;">➤</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script>
-        function openModal(src) {
-            document.getElementById('imgExpanded').src = src;
+        function openModal(url, title, comments, id) {
+            document.getElementById('imgExpanded').src = url;
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('commentForm').action = "/comment/" + id;
+            
+            let list = document.getElementById('modalComments');
+            list.innerHTML = "";
+            comments.forEach(c => {
+                let div = document.createElement('div');
+                div.style = "background:#f5f3ff; padding:8px; margin-top:5px; border-radius:8px; border-left:3px solid #a78bfa";
+                div.innerText = c;
+                list.appendChild(div);
+            });
+
             document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
         }
     </script>
 </body>
